@@ -27,9 +27,7 @@ const App = () => {
         />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/start" element={<Start />} />
-        <Route path="/about" element={<About />} />
-
-      
+        {/* <Route path="/about" element={<About />} /> */}
         {/* другие маршруты */}
       </Routes>
       <Footer />
