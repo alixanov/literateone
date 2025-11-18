@@ -101,8 +101,7 @@ const MainContent = () => {
         <Badge>Rasmiy taʼlim loyihasi</Badge>
 
         <Title>
-          Axborot <br />
-          Savodxonligi
+          MEDIA SAVODXONLIK VA AXBOROT MADANIYATI
         </Title>
 
         <Subtitle>

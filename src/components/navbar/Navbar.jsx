@@ -80,7 +80,7 @@ const Navbar = () => {
           <IconWrapper>
             <LocalLibraryIcon />
           </IconWrapper>
-          <LogoText>Literate</LogoText>
+          <LogoText>MEDIA LITERACY AND INFORMATION CULTURE </LogoText>
         </Logo>
         <NavLinks>
           <StyledLink to="/tasks">Topshiriqlar</StyledLink>

@@ -4,9 +4,9 @@ import { Swiper as SwiperComponent, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./swiper.css";
-import oneImg from "../../assets/oneImg.jpg";
-import twoImg from "../../assets/twoImg.avif";
-import threeImg from "../../assets/thereImg.jpg";
+import oneImg from "../../assets/1.jpg";
+import twoImg from "../../assets/4.jpg";
+import threeImg from "../../assets/5.jpg";
 
 // массив слайдов
 const sliderData = [
