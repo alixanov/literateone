@@ -260,13 +260,13 @@ const Footer = () => {
           </Description>
 
           <SocialLinks>
-            <SocialIcon href="https://t.me/namdtx_mediasavodxonlik" target="_blank" rel="noopener noreferrer">
+            <SocialIcon href="https://t.me/" target="_blank" rel="noopener noreferrer">
               <TelegramIcon />
             </SocialIcon>
-            <SocialIcon href="https://instagram.com/namdtu_official" target="_blank" rel="noopener noreferrer">
+            <SocialIcon href="https://instagram.com/" target="_blank" rel="noopener noreferrer">
               <InstagramIcon />
             </SocialIcon>
-            <SocialIcon href="https://youtube.com/@namdtu" target="_blank" rel="noopener noreferrer">
+            <SocialIcon href="https://youtube.com/" target="_blank" rel="noopener noreferrer">
               <YouTubeIcon />
             </SocialIcon>
           </SocialLinks>

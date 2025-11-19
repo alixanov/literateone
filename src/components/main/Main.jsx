@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Section = styled.section`
   padding: 6rem 2rem;
   text-align: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg,rgba(248, 250, 252, 0.53) 0%,rgba(226, 232, 240, 0.31) 100%);
 `;
 
 const Wrapper = styled.div`
