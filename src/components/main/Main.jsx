@@ -53,7 +53,7 @@ const ButtonGroup = styled.div`
   margin-bottom: 4rem;
 `;
 
-// Основная кнопка — с твоим градиентом
+// Основная кнопка — с градиентом
 const PrimaryButton = styled(Link)`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -76,7 +76,7 @@ const PrimaryButton = styled(Link)`
   }
 `;
 
-// Вторичная кнопка — с обводкой в цвет градиента
+// Вторичная кнопка — с обводкой
 const SecondaryButton = styled(Link)`
   background: transparent;
   color: #667eea;
@@ -94,6 +94,7 @@ const SecondaryButton = styled(Link)`
     border-color: transparent;
   }
 `;
+
 const MainContent = () => {
   return (
     <Section>
@@ -105,24 +106,20 @@ const MainContent = () => {
         </Title>
 
         <Subtitle>
-          Fuqarolarning huquqiy va media savodxonligini oshirish uchun yaratilgan bepul onlayn platforma.
-          <br /><br />
-          Dastur mutaxassislar tomonidan tasdiqlangan va umumtaʼlim hamda qoʻshimcha taʼlim muassasalarida
-          foydalanish uchun tavsiya etilgan.
+          Dastur mutaxassislar tomonidan tasdiqlangan bo‘lib, oliy pedagogik taʼlim muassasalari talabalariga qo‘shimcha taʼlim resursi sifatida tavsiya etiladi.
         </Subtitle>
 
         <ButtonGroup>
           <PrimaryButton to="/start">
-            Bepul o‘qishni boshlash
+            Bepul o‘qishni boshlang
           </PrimaryButton>
           <SecondaryButton to="/about">
-            Loyiha haqida batafsil
+            Loyiha haqida batafsil maʼlumot
           </SecondaryButton>
         </ButtonGroup>
       </Wrapper>
     </Section>
   );
 };
-
 
 export default MainContent;

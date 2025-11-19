@@ -1,5 +1,5 @@
 import React from 'react'
-import imgTwo from "../../assets/1.jpg"
+import imgTwo from "../../assets/6.jpg"
 
 const About = () => {
   return (
@@ -36,6 +36,10 @@ const About = () => {
             kurslar, testlar va amaliy mashg‘ulotlarni taqdim etadi.
             Maqsad — yoshlar va mutaxassislar uchun axborot oqimida
             to‘g‘ri yo‘nalish berish, huquqiy va texnik bilimlarni mustahkamlash.
+          </p>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.7', color: '#333', fontStyle: 'italic' }}>
+            Dastur mutaxassislar tomonidan tasdiqlangan va oliy pedagogik taʼlim muassasalari
+            talabalariga qoʻshimcha taʼlim resursi sifatida foydalanish uchun tavsiya etilgan.
           </p>
         </div>
       </div>

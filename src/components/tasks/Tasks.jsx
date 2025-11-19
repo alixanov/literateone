@@ -1,8 +1,12 @@
+// src/components/tasks/Tasks.jsx
 import React, { useState } from "react";
 import styled from "styled-components";
 
+/* ==================== СТИЛИ ==================== */
 const PageWrapper = styled.div`
-  
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 `;
 
 const TasksContainer = styled.div`
@@ -11,7 +15,7 @@ const TasksContainer = styled.div`
   align-items: center;
   gap: 3rem;
   padding: 3rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  flex-wrap: wrap;
 `;
 
 const Card = styled.div`
@@ -74,7 +78,6 @@ const CardButton = styled.button`
   color: white;
   font-weight: 600;
   font-size: 1.05rem;
-  text-align: center;
   padding: 1rem 2rem;
   border-radius: 12px;
   border: none;
@@ -89,18 +92,11 @@ const CardButton = styled.button`
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
   }
-
-  &:active {
-    transform: translateY(0);
-  }
 `;
 
 const ModalOverlay = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.85);
   display: flex;
   justify-content: center;
@@ -138,7 +134,6 @@ const CloseButton = styled.button`
   align-items: center;
   justify-content: center;
   color: #4a5568;
-  font-weight: 300;
 
   &:hover {
     background: #cbd5e0;
@@ -150,7 +145,6 @@ const ModalTitle = styled.h2`
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #1a202c;
   text-align: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
@@ -164,7 +158,7 @@ const ProgressBar = styled.div`
   border-radius: 10px;
   margin: 1.5rem 0 2.5rem;
   overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const ProgressFill = styled.div`
@@ -172,7 +166,7 @@ const ProgressFill = styled.div`
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   border-radius: 10px;
   transition: width 0.4s ease;
-  width: ${props => props.progress}%;
+  width: ${({ progress }) => progress}%;
 `;
 
 const QuestionNumber = styled.div`
@@ -199,9 +193,9 @@ const OptionsContainer = styled.div`
 `;
 
 const OptionButton = styled.button`
-  background: ${props => props.selected ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : '#f7fafc'};
-  color: ${props => props.selected ? 'white' : '#2d3748'};
-  border: 2px solid ${props => props.selected ? '#667eea' : '#e2e8f0'};
+  background: ${({ selected }) => (selected ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : '#f7fafc')};
+  color: ${({ selected }) => (selected ? 'white' : '#2d3748')};
+  border: 2px solid ${({ selected }) => (selected ? '#667eea' : '#e2e8f0')};
   border-radius: 12px;
   padding: 1.2rem 1.5rem;
   font-size: 1.05rem;
@@ -212,7 +206,7 @@ const OptionButton = styled.button`
 
   &:hover {
     border-color: #667eea;
-    background: ${props => props.selected ? 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)' : '#edf2f7'};
+    background: ${({ selected }) => (selected ? 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)' : '#edf2f7')};
     transform: translateX(5px);
   }
 `;
@@ -264,9 +258,9 @@ const ResultText = styled.p`
 
 const CrosswordGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(12, 45px);
-  grid-template-rows: repeat(12, 45px);
-  gap: 3px;
+  grid-template-columns: repeat(12, 40px);
+  grid-template-rows: repeat(12, 40px);
+  gap: 2px;
   margin: 2rem auto;
   justify-content: center;
   background: #e2e8f0;
@@ -275,24 +269,31 @@ const CrosswordGrid = styled.div`
 `;
 
 const CrosswordCell = styled.input`
-  width: 45px;
-  height: 45px;
-  border: 2px solid ${props => props.blocked ? 'transparent' : props.correct ? '#48bb78' : props.incorrect ? '#f56565' : '#cbd5e0'};
-  background: ${props => props.blocked ? '#2d3748' : props.correct ? '#c6f6d5' : props.incorrect ? '#fed7d7' : 'white'};
+  width: 40px;
+  height: 40px;
+  border: 2px solid ${({ blocked, isCorrect, isIncorrect }) =>
+    blocked ? 'transparent' :
+      isCorrect ? '#48bb78' :
+        isIncorrect ? '#f56565' :
+          '#cbd5e0'};
+  background: ${({ blocked, isCorrect, isIncorrect }) =>
+    blocked ? '#2d3748' :
+      isCorrect ? '#c6f6d5' :
+        isIncorrect ? '#fed7d7' :
+          'white'};
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
   color: #2d3748;
-  border-radius: 6px;
+  border-radius: 4px;
   outline: none;
   transition: all 0.3s ease;
-  position: relative;
 
   &:focus {
     border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3);
-    transform: scale(1.1);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+    transform: scale(1.05);
     z-index: 10;
   }
 
@@ -300,20 +301,16 @@ const CrosswordCell = styled.input`
     background: #2d3748;
     cursor: not-allowed;
   }
-
-  &::placeholder {
-    color: #cbd5e0;
-    font-size: 0.8rem;
-  }
 `;
 
 const CellNumber = styled.span`
   position: absolute;
-  top: 2px;
-  left: 4px;
-  font-size: 0.7rem;
+  top: 1px;
+  left: 3px;
+  font-size: 0.65rem;
   font-weight: 600;
   color: #667eea;
+  pointer-events: none;
 `;
 
 const ClueSection = styled.div`
@@ -345,7 +342,7 @@ const ClueItem = styled.li`
   padding: 0.5rem;
   border-radius: 6px;
   transition: background 0.2s ease;
-  
+
   &:hover {
     background: white;
   }
@@ -361,6 +358,43 @@ const SuccessMessage = styled.div`
   font-weight: 600;
   margin: 1.5rem 0;
   box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+
+const StageInfo = styled.div`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #667eea;
+  margin: 1rem 0;
+  font-weight: 700;
+`;
+
+const AnswerReveal = styled.div`
+  background: #edf2f7;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #667eea;
+`;
+
+const AnswerTitle = styled.h4`
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+`;
+
+const AnswerItem = styled.div`
+  font-size: 1.05rem;
+  color: #4a5568;
+  padding: 0.5rem 0;
+  line-height: 1.6;
 `;
 
 /* ==================== ДАННЫЕ ==================== */
@@ -382,6 +416,26 @@ const testQuestions = [
   { question: "Agar ma'lumotning haqiqiyligiga shubha qilsangiz nima qilishingiz kerak?", options: ["A) Darhol ijtimoiy tarmoqlarda baham ko'rish", "B) Ma'lumotni bir nechta mustaqil manbalarda tekshirish", "C) Unga e'tibor bermaslik"], correct: 1 }
 ];
 
+const crosswordStages = [
+  {
+    stage: 1,
+    title: "1-bosqich: Asosiy tushunchalar",
+    words: [
+      { word: "MEDIA", row: 2, col: 2, dir: "h", clue: "Ommaviy axborot vositalari (5 harf)", number: "1" },
+      { word: "AXBOROT", row: 2, col: 2, dir: "v", clue: "Ma'lumot, xabar (7 harf)", number: "2" },
+    ]
+  },
+  {
+    stage: 2,
+    title: "2-bosqich: Tekshirish va tahlil",
+    words: [
+      { word: "FAKTAR", row: 2, col: 4, dir: "v", clue: "Faktlarni tekshirish (6 harf)", number: "3" },
+      { word: "YANGILIK", row: 6, col: 2, dir: "h", clue: "Voqea haqida xabar (8 harf)", number: "4" },
+      { word: "INTERNET", row: 1, col: 6, dir: "v", clue: "Global axborot tarmog'i (8 harf)", number: "5" },
+    ]
+  }
+];
+
 /* ==================== КОМПОНЕНТ ==================== */
 const Tasks = () => {
   const [activeModal, setActiveModal] = useState(null);
@@ -389,8 +443,12 @@ const Tasks = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
+
+  // Кроссворд
+  const [currentStage, setCurrentStage] = useState(0);
   const [crosswordInput, setCrosswordInput] = useState({});
-  const [checkedCells, setCheckedCells] = useState({});
+  const [showStageAnswers, setShowStageAnswers] = useState(false);
+  const [completedStages, setCompletedStages] = useState([]);
   const [isComplete, setIsComplete] = useState(false);
 
   const openModal = (type) => {
@@ -399,21 +457,24 @@ const Tasks = () => {
     setSelectedAnswer(null);
     setScore(0);
     setShowResult(false);
+    setCurrentStage(0);
     setCrosswordInput({});
-    setCheckedCells({});
+    setShowStageAnswers(false);
+    setCompletedStages([]);
     setIsComplete(false);
   };
 
   const closeModal = () => setActiveModal(null);
 
+  /* ТЕСТ */
   const handleAnswerSelect = (index) => setSelectedAnswer(index);
 
   const handleNextQuestion = () => {
     if (selectedAnswer === testQuestions[currentQuestion].correct) {
-      setScore(score + 1);
+      setScore(prev => prev + 1);
     }
     if (currentQuestion < testQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      setCurrentQuestion(prev => prev + 1);
       setSelectedAnswer(null);
     } else {
       setShowResult(true);
@@ -427,76 +488,90 @@ const Tasks = () => {
     setShowResult(false);
   };
 
-  /* ---------- КРОССВОРД ---------- */
+  /* КРОССВОРД */
   const createCrosswordGrid = () => {
     const grid = Array(12).fill(null).map(() => Array(12).fill({ type: 'blocked' }));
 
-    // MEDIA (горизонталь, строка 2)
-    'MEDIA'.split('').forEach((letter, i) => {
-      grid[2][2 + i] = { type: 'active', letter, number: i === 0 ? '1' : null };
-    });
-
-    // AXBOROT (горизонталь, строка 4)
-    'AXBOROT'.split('').forEach((letter, i) => {
-      grid[4][1 + i] = { type: 'active', letter, number: i === 0 ? '2' : null };
-    });
-
-    // FAKTAR (вертикаль, столбец 4, начинается с строки 2)
-    'FAKTAR'.split('').forEach((letter, i) => {
-      const row = 2 + i;
-      grid[row][4] = { type: 'active', letter, number: i === 0 ? '3' : null };
-    });
-
-    // YANGILIK (горизонталь, строка 6)
-    'YANGILIK'.split('').forEach((letter, i) => {
-      grid[6][2 + i] = { type: 'active', letter, number: i === 0 ? '4' : null };
-    });
-
-    // INTERNET (вертикаль, столбец 6, начинается с строки 1)
-    'INTERNET'.split('').forEach((letter, i) => {
-      grid[1 + i][6] = { type: 'active', letter, number: i === 0 ? '5' : null };
-    });
-
+    for (let i = 0; i <= currentStage; i++) {
+      crosswordStages[i].words.forEach(({ word, row, col, dir, number }) => {
+        word.split("").forEach((letter, idx) => {
+          const r = dir === "h" ? row : row + idx;
+          const c = dir === "h" ? col + idx : col;
+          if (r < 12 && c < 12) {
+            grid[r][c] = {
+              type: 'active',
+              letter,
+              number: idx === 0 ? number : (grid[r][c]?.number || null),
+              stage: i
+            };
+          }
+        });
+      });
+    }
     return grid;
   };
 
   const crosswordGrid = createCrosswordGrid();
 
   const handleCrosswordChange = (row, col, value) => {
+    if (showStageAnswers) return;
     const key = `${row}-${col}`;
     const newValue = value.toUpperCase().slice(-1);
-    setCrosswordInput({ ...crosswordInput, [key]: newValue });
+    setCrosswordInput(prev => ({ ...prev, [key]: newValue }));
 
-    // Автофокус на следующую ячейку
     if (newValue && col < 11) {
-      const next = document.querySelector(`input[data-row="${row}"][data-col="${col + 1}"]`);
-      if (next && !next.disabled) next.focus();
+      const nextCell = document.querySelector(`input[data-row="${row}"][data-col="${col + 1}"]`);
+      if (nextCell && !nextCell.disabled) nextCell.focus();
     }
   };
 
-  const checkCrossword = () => {
-    const newChecked = {};
-    let correct = 0;
-    let total = 0;
+  const checkCurrentStage = () => {
+    const words = crosswordStages[currentStage].words;
+    let allCorrect = true;
 
-    crosswordGrid.forEach((row, r) => {
-      row.forEach((cell, c) => {
-        if (cell.type === 'active') {
-          total++;
-          const key = `${r}-${c}`;
-          const user = (crosswordInput[key] || '').trim();
-          const isCorrect = user === cell.letter;
-          newChecked[key] = isCorrect;
-          if (isCorrect) correct++;
-        }
+    words.forEach(({ word, row, col, dir }) => {
+      word.split("").forEach((letter, idx) => {
+        const r = dir === "h" ? row : row + idx;
+        const c = dir === "h" ? col + idx : col;
+        const key = `${r}-${c}`;
+        if ((crosswordInput[key] || '').trim() !== letter) allCorrect = false;
       });
     });
 
-    setCheckedCells(newChecked);
-    if (correct === total) setIsComplete(true);
+    setShowStageAnswers(true);
+    if (allCorrect && !completedStages.includes(currentStage)) {
+      setCompletedStages(prev => [...prev, currentStage]);
+    }
   };
 
-  const progress = ((currentQuestion + 1) / testQuestions.length) * 100;
+  const nextStage = () => {
+    if (currentStage < crosswordStages.length - 1) {
+      setCurrentStage(prev => prev + 1);
+      setShowStageAnswers(false);
+    } else {
+      setIsComplete(true);
+    }
+  };
+
+  const resetCrossword = () => {
+    setCurrentStage(0);
+    setCrosswordInput({});
+    setShowStageAnswers(false);
+    setCompletedStages([]);
+    setIsComplete(false);
+  };
+
+  const getCellStatus = (row, col, cell) => {
+    if (!showStageAnswers || cell.type !== 'active') return {};
+    const key = `${row}-${col}`;
+    const userInput = (crosswordInput[key] || '').trim();
+    const isCorrect = userInput === cell.letter;
+    const isIncorrect = userInput && !isCorrect;
+    return { isCorrect, isIncorrect };
+  };
+
+  const testProgress = ((currentQuestion + (showResult ? 1 : 0)) / testQuestions.length) * 100;
+  const currentStageData = crosswordStages[currentStage];
 
   return (
     <PageWrapper>
@@ -505,22 +580,22 @@ const Tasks = () => {
           <CardIcon>⚖️</CardIcon>
           <CardTitle>Mediasavodxonlik testlari</CardTitle>
           <CardDescription>
-            Mediasavodxonlik va axborot xavfsizligi sohasidagi kompetensiyalaringizni tekshirish uchun 15 ta savoldan o'ting.
+            Mediasavodxonlik va axborot xavfsizligi bo‘yicha 15 savolli test
           </CardDescription>
           <CardButton onClick={() => openModal('test')}>Testni boshlash</CardButton>
         </Card>
 
         <Card>
           <CardIcon>📋</CardIcon>
-          <CardTitle>Mediasavodxonlik krossvord</CardTitle>
+          <CardTitle>Mediasavodxonlik krossvordi</CardTitle>
           <CardDescription>
-            Mediasavodxonlik terminologiyasi bilan professional krossvordni yeching.
+            Bosqichma-bosqich krossvordni yeching
           </CardDescription>
           <CardButton onClick={() => openModal('crossword')}>Krossvordni ochish</CardButton>
         </Card>
       </TasksContainer>
 
-      {/* ==================== ТЕСТ ==================== */}
+      {/* ТЕСТ */}
       {activeModal === 'test' && (
         <ModalOverlay onClick={closeModal}>
           <ModalContent onClick={e => e.stopPropagation()}>
@@ -530,7 +605,7 @@ const Tasks = () => {
               <>
                 <ModalTitle>Mediasavodxonlik testi</ModalTitle>
                 <QuestionNumber>Savol {currentQuestion + 1} / {testQuestions.length}</QuestionNumber>
-                <ProgressBar><ProgressFill progress={progress} /></ProgressBar>
+                <ProgressBar><ProgressFill progress={testProgress} /></ProgressBar>
 
                 <QuestionText>{testQuestions[currentQuestion].question}</QuestionText>
 
@@ -558,76 +633,93 @@ const Tasks = () => {
                 <ModalTitle>Test natijalari</ModalTitle>
                 <ResultScore>{score} / {testQuestions.length}</ResultScore>
                 <ResultText>
-                  {score >= 13 ? '🏆 A\'lo! Siz mediasavodxonlik bo\'yicha ekspertsiz!' :
-                    score >= 10 ? '✅ Juda yaxshi! Siz mavzuni yaxshi bilasiz!' :
-                      score >= 7 ? '👍 Yaxshi! Ishlash uchun joy bor!' :
-                        '📚 Mediasavodxonlik bo\'yicha materiallarni o\'rganishni tavsiya qilamiz!'}
+                  {score >= 13 ? '🏆 A’lo!' :
+                    score >= 10 ? '✅ Juda yaxshi!' :
+                      score >= 7 ? '👍 Yaxshi!' :
+                        '📚 Yana o‘rganing!'}
                 </ResultText>
-                <ResultText>To'g'ri javoblar foizi: {Math.round((score / testQuestions.length) * 100)}%</ResultText>
-                <ActionButton onClick={restartTest}>Testni qayta topshirish</ActionButton>
+                <ResultText>To‘g‘ri javoblar: {Math.round((score / testQuestions.length) * 100)}%</ResultText>
+                <ActionButton onClick={restartTest}>Qayta topshirish</ActionButton>
               </ResultContainer>
             )}
           </ModalContent>
         </ModalOverlay>
       )}
 
-      {/* ==================== КРОССВОРД ==================== */}
+      {/* КРОССВОРД */}
       {activeModal === 'crossword' && (
         <ModalOverlay onClick={closeModal}>
           <ModalContent onClick={e => e.stopPropagation()}>
             <CloseButton onClick={closeModal}>×</CloseButton>
             <ModalTitle>Mediasavodxonlik krossvordi</ModalTitle>
 
+            <StageInfo>{currentStageData.title} ({currentStage + 1}/{crosswordStages.length})</StageInfo>
+
             {isComplete && (
               <SuccessMessage>
-                🎉 Tabriklaymiz! Siz krossvordni to'liq to'g'ri yechdingiz! 🎉
+                🎉 Tabriklaymiz! Barcha bosqichlar muvaffaqiyatli yakunlandi!
               </SuccessMessage>
             )}
 
             <CrosswordGrid>
               {crosswordGrid.map((row, rowIdx) =>
-                row.map((cell, colIdx) => (
-                  <div key={`${rowIdx}-${colIdx}`} style={{ position: 'relative' }}>
-                    {cell.number && <CellNumber>{cell.number}</CellNumber>}
-                    <CrosswordCell
-                      data-row={rowIdx}
-                      data-col={colIdx}
-                      blocked={cell.type === 'blocked'}
-                      disabled={cell.type === 'blocked'}
-                      correct={checkedCells[`${rowIdx}-${colIdx}`] === true}
-                      incorrect={checkedCells[`${rowIdx}-${colIdx}`] === false}
-                      maxLength={1}
-                      value={crosswordInput[`${rowIdx}-${colIdx}`] || ''}
-                      onChange={e => handleCrosswordChange(rowIdx, colIdx, e.target.value)}
-                      placeholder={cell.type === 'active' ? '' : ''}
-                    />
-                  </div>
-                ))
+                row.map((cell, colIdx) => {
+                  const { isCorrect, isIncorrect } = getCellStatus(rowIdx, colIdx, cell);
+                  return (
+                    <div key={`${rowIdx}-${colIdx}`} style={{ position: 'relative' }}>
+                      {cell.number && <CellNumber>{cell.number}</CellNumber>}
+                      <CrosswordCell
+                        data-row={rowIdx}
+                        data-col={colIdx}
+                        type="text"
+                        blocked={cell.type === 'blocked'}
+                        disabled={cell.type === 'blocked' || (showStageAnswers && cell.stage !== currentStage)}
+                        isCorrect={isCorrect}
+                        isIncorrect={isIncorrect}
+                        maxLength={1}
+                        value={crosswordInput[`${rowIdx}-${colIdx}`] || ''}
+                        onChange={(e) => handleCrosswordChange(rowIdx, colIdx, e.target.value)}
+                      />
+                    </div>
+                  );
+                })
               )}
             </CrosswordGrid>
 
             <ClueSection>
-              <ClueTitle>📝 Gorizontal bo'yicha:</ClueTitle>
+              <ClueTitle>Savollar:</ClueTitle>
               <ClueList>
-                <ClueItem><strong>1.</strong> Ommaviy axborot vositalari (5 harf) — MEDIA</ClueItem>
-                <ClueItem><strong>2.</strong> Ma'lumot, xabar (7 harf) — AXBOROT</ClueItem>
-                <ClueItem><strong>4.</strong> Voqea haqida xabar (8 harf) — YANGILIK</ClueItem>
+                {currentStageData.words.map((w, i) => (
+                  <ClueItem key={i}>{w.number}. {w.clue}</ClueItem>
+                ))}
               </ClueList>
             </ClueSection>
 
-            <ClueSection>
-              <ClueTitle>📝 Vertikal bo'yicha:</ClueTitle>
-              <ClueList>
-                <ClueItem><strong>3.</strong> Faktlarni tekshirish (6 harf) — FAKTAR</ClueItem>
-                <ClueItem><strong>5.</strong> Global axborot tarmog‘i (8 harf) — INTERNET</ClueItem>
-              </ClueList>
-            </ClueSection>
+            {!showStageAnswers && !isComplete && (
+              <ButtonGroup>
+                <ActionButton onClick={checkCurrentStage}>Tekshirish</ActionButton>
+              </ButtonGroup>
+            )}
 
-            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-              <ActionButton onClick={checkCrossword}>
-                Javoblarni tekshirish
-              </ActionButton>
-            </div>
+            {showStageAnswers && !isComplete && (
+              <>
+                <AnswerReveal>
+                  <AnswerTitle>To‘g‘ri javoblar:</AnswerTitle>
+                  {currentStageData.words.map((w, i) => (
+                    <AnswerItem key={i}>{w.number}. <strong>{w.word}</strong> — {w.clue}</AnswerItem>
+                  ))}
+                </AnswerReveal>
+
+                <ButtonGroup>
+                  <ActionButton onClick={nextStage}>
+                    {currentStage < crosswordStages.length - 1 ? 'Keyingi bosqich' : 'Yakunlash'}
+                  </ActionButton>
+                  <ActionButton onClick={resetCrossword} style={{ background: '#e53e3e' }}>
+                    Qayta boshlash
+                  </ActionButton>
+                </ButtonGroup>
+              </>
+            )}
           </ModalContent>
         </ModalOverlay>
       )}
