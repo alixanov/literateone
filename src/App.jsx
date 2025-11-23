@@ -9,6 +9,9 @@ import Tasks from "./components/tasks/Tasks";
 import Start from "./components/start/Satrt";
 import Footer from "./components/footer/Footer";
 import About from "./components/about/About";
+import Info from "./components/info/Info";
+import Card from "./components/card/Card";
+import Content from "./components/content/Content";
 
 const App = () => {
   return (
@@ -28,6 +31,10 @@ const App = () => {
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/start" element={<Start />} />
         <Route path="/about" element={<About />} />
+        <Route path="/card" element={<Card />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/content" element={<Content />} />
+
         {/* другие маршруты */}
       </Routes>
       <Footer />

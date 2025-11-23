@@ -84,6 +84,7 @@ const Navbar = () => {
         </Logo>
         <NavLinks>
           <StyledLink to="/tasks">Topshiriqlar</StyledLink>
+          <StyledLink to="/card">Malumotlar</StyledLink>
         </NavLinks>
       </NavbarContent>
     </NavbarContainer>
